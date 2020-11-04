@@ -25,6 +25,7 @@ export default class WeatherCard extends Component {
                         temp: res.data.main.temp,
                         tempDescription: res.data.weather[0].description,
                         location: `${res.data.name}, ${res.data.sys.country}`
+                        
                     });
                 
             })
@@ -44,7 +45,8 @@ export default class WeatherCard extends Component {
                     {
                         temp: res.data.main.temp,
                         tempDescription: res.data.weather[0].description,
-                        location: `${res.data.name}, ${res.data.sys.country}`
+                        location: `${res.data.name}, ${res.data.sys.country}`,
+                        city: res.data.name
                     });
                 
             })
@@ -52,6 +54,8 @@ export default class WeatherCard extends Component {
         }
         return (
             <React.Fragment>
+
+<h4 style = {{color:"white", paddingTop: "20px", paddingBottom: "20px"}}> Hello Visitor, Welcome To {this.state.city}!</h4>
             <div className="weathercontainer">
   <div className="weather-side">
     <div className="weather-gradient" />
