@@ -3,18 +3,20 @@ import React from 'react'
 import TaskMain from './components/TaskMain'
 import Welcome from './components/Welcome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Container} from 'react-bootstrap'
+import {Container, Row} from 'react-bootstrap'
 import NavBar from './components/NavBar';
+import Layout from './components/Layout';
 
 function App() {
   return (
-    <React.Fragment>
+    <Layout>
       <NavBar/>
-    <Container>
+    <Container >
       <Welcome/>
     <TaskMain/> 
+   
     </Container>
-    </React.Fragment>
+    </Layout>
     
   );
 }
