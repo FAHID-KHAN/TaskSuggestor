@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {Form, Button} from 'react-bootstrap'
 
 export default class WeatherCard extends Component {
 
@@ -9,12 +10,15 @@ export default class WeatherCard extends Component {
         this.state = {
              temp : null,
              tempDescription: null,
-             location: "Tampere, FI"
+             location: "Tampere, FI",
+             city: 'Tampere',
+             cityEntry: ''
+             
         }
     }
     
         componentDidMount() {
-            axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.location}&units=metric&APPID=494b089ffcd713248e6d62d7d91d25fe`)
+            axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.city}&units=metric&APPID=494b089ffcd713248e6d62d7d91d25fe`)
             .then(res => {
                 this.setState(
                     {
@@ -30,7 +34,24 @@ export default class WeatherCard extends Component {
         const dateFormat = { year: 'numeric', month: 'long', day: 'numeric' };
         const Today = new Date().toLocaleString("default", { weekday: "long" })
         const date = new Date().toLocaleDateString("en-US", dateFormat)
+
+        const changeLocation = (e) => {
+            e.preventDefault();
+            
+            axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityEntry}&units=metric&APPID=494b089ffcd713248e6d62d7d91d25fe`)
+            .then(res => {
+                this.setState(
+                    {
+                        temp: res.data.main.temp,
+                        tempDescription: res.data.weather[0].description,
+                        location: `${res.data.name}, ${res.data.sys.country}`
+                    });
+                
+            })
+
+        }
         return (
+            <React.Fragment>
             <div className="weathercontainer">
   <div className="weather-side">
     <div className="weather-gradient" />
@@ -43,8 +64,27 @@ export default class WeatherCard extends Component {
     </div>
 
   </div>
+  <div style = {{paddingTop: "20px"}}>  
+  <Form inline onSubmit = {changeLocation}>
+  <Form.Label htmlFor="inlineFormInputName2" srOnly>
+    Name
+  </Form.Label>
+  <Form.Control
+    className="mb-2 mr-sm-2"
+    id="inlineFormInputName2"
+    placeholder="Tampere" onChange = {(e) => this.setState({cityEntry: e.target.value})}
+  />
+
+<Button type="submit" className="mb-2">
+  Change Location
+  </Button>
+  </Form>
+  
+  </div>
+  
 
 </div>
+</React.Fragment>
 
         )
     }
