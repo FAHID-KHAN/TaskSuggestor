@@ -5,6 +5,7 @@ import {Container, Row, Col} from 'react-bootstrap'
 import NavBar from './components/NavBar';
 import Layout from './components/Layout';
 import WeatherCard from './components/WeatherCard';
+import ThingsToDo from './components/ThingsToDo';
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
     <TaskMain/> 
     </Col>
     </Row>
+    
+    <ThingsToDo/>
+    
    
     </Container>
     </Layout>

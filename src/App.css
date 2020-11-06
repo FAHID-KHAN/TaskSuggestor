@@ -271,7 +271,7 @@ body {
 }
 
 .card {
-  position: relative;
+  position: fixed;
   display: flex;
   flex-direction: column;
   min-width: 0;
