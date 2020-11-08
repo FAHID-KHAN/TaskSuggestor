@@ -1,6 +1,6 @@
 import React from 'react';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
-import {Card, Form, Col, Button, ListGroup, ListGroupItem} from 'react-bootstrap'
+import {Card, Form, Col, Button, ListGroup, ListGroupItem, Modal, Spinner} from 'react-bootstrap'
 
 export let currentTasks = [];
 
@@ -9,12 +9,69 @@ class TaskMain extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            taskLists : ["Add A Task To See Here!"],
-            taskName: ''
+            taskLists : [
+              
+            ],
+            taskName: '',
+            showModal: false,
+            currentTime: ''
         }
+        //this.setAlarmTime = this.setAlarmTime.bind(this);
+
+      }
+
+      componentDidMount(){
+        this.clock = setInterval(
+          () => this.setCurrentTime(),
+          1000
+        )
+        this.interval = setInterval(
+          () => this.checkAlarmClock(),
+        1000)
+      }
+
+      componentWillUnmount(){
+        clearInterval(this.clock);
+        clearInterval(this.interval);
+      }
+
+      setCurrentTime(){
+        this.setState({
+          currentTime: new Date().toLocaleTimeString('en-US', { hour12: false })
+        });
+      }
+    
+     
+    
+      checkAlarmClock(){
+        this.state.taskLists.forEach(task => {
+          if(task.alarmTime === 'undefined' || !task.alarmTime) {
+            this.alarmMessage = "Please set your alarm.";
+          } else {
+            this.alarmMessage = "Your alarm is set for " + task.alarmTime + ".";
+            if(this.state.currentTime === task.alarmTime) {
+              alert("its time!");
+              task.alarmTime = null;
+            } else {
+            }
+          }  
+        }) 
       }
 
     render() {
+
+      const setAlarmTime = (event, key) => {
+        event.preventDefault();
+        const inputAlarmTimeModified = event.target.value + ':00'
+        currentTasks[key].alarmTime = inputAlarmTimeModified
+        this.setState({
+        taskLists: currentTasks
+        })
+
+      }
+
+
+      const handleClose = () => this.setState({showModal: false});
 
         const addTasks = (e) => {
           if (this.state.taskName === "") {
@@ -23,7 +80,7 @@ class TaskMain extends React.Component {
 
           else {
             e.preventDefault()
-            currentTasks.push(this.state.taskName)
+            currentTasks.push({task: this.state.taskName, currentTime: '', alarmTime: '' })
             
             this.setState({taskLists: currentTasks})
           }
@@ -44,8 +101,14 @@ class TaskMain extends React.Component {
           this.setState({taskLists: newTaskList});
           
         }
+
+        const alarmHandler = (event, key) => {
+          event.preventDefault();
+          setAlarmTime(event, key)
+        }
         
       return (
+        <React.Fragment>
 
         <Card style = {{marginTop: "80px"}}>
   <Card.Body>
@@ -65,21 +128,54 @@ class TaskMain extends React.Component {
   {(provided) => (
 <ListGroup className="list-group-flush" style = {{paddingTop: "30px"}} ref = {provided.innerRef} {...provided.droppableProps}>
    {this.state.taskLists.map((value, key) => {
-     return <Draggable key = {key} draggableId = {`${key}`} index = {key}>
+     return <React.Fragment>
+       <Modal show={this.state.showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Set an Alarm For This Task</Modal.Title>
+        </Modal.Header>
+        <Modal.Body> <div>
+        
+        <h2>It is {this.state.currentTime}.
+        </h2>
+        <h2>{this.alarmMessage}
+        </h2>
+        <Form>
+          <input type="time" onChange={(e) => alarmHandler(e, key)}></input>
+        </Form>
+      </div>
+      </Modal.Body>
+        <Modal.Footer>
+         
+          <Button variant="primary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+     <Draggable key = {key} draggableId = {`${key}`} index = {key}>
      {(provided) => (
       <ListGroupItem 
       {...provided.draggableProps} 
       {...provided.dragHandleProps} 
       ref = {provided.innerRef} 
       key = {key}> 
-      {value}  
-      <a href = "#" ><i style = {{color: 'red', float: "right"}} 
+      <i class="fas fa-bars" style = {{color: "black", float: "left", marginRight: "20px"}}/>
+      {value.task}
+      <div style = {{float: "right"}}>
+      <a href = "#" style = {{paddingRight: "10px"}} onClick ={()=>  this.setState({showModal: true})}>
+      <i class="far fa-clock" style = {{color: "black", paddingRight: "5px"}} 
+      /> 
+     {value.alarmTime}
+      </a>
+      <a href = "#" >
+      <i style = {{color: 'red'}} 
       onClick = {() => removeTask(value, key)} className=" fas fa-trash-alt" /> </a>
+      </div>
       </ListGroupItem>
      )}
      </Draggable>
-   
-   })}
+     </React.Fragment>
+   })
+   }
      {provided.placeholder}
   </ListGroup>
   )}
@@ -88,6 +184,13 @@ class TaskMain extends React.Component {
    
   </Card.Body>
 </Card>
+
+{/* Modal For Setting a Timer */}
+
+
+
+
+</React.Fragment>
       
   )}
 }
