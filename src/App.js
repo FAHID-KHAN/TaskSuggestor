@@ -11,14 +11,12 @@ function App() {
   return (
     <Layout>
       <NavBar/>
-    <Container fluid>
+    <Container >
       <Row>
-      
         <Col>
-    
       <WeatherCard/>
       </Col>
-      <Col xs = {8}>
+      <Col>
     <TaskMain/> 
     </Col>
     </Row>
