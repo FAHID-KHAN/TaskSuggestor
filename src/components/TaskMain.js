@@ -3,18 +3,18 @@ import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
 import {Card, Form, Col, Button, ListGroup, ListGroupItem, Modal, Spinner} from 'react-bootstrap'
 
 export let currentTasks = [];
+export let archivedTasks = [];
 
 class TaskMain extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            taskLists : [
-              
-            ],
+            taskLists : [],
             taskName: '',
             showModal: false,
-            currentTime: ''
+            currentTime: '',
+            archivedTasksList: []
         }
         //this.setAlarmTime = this.setAlarmTime.bind(this);
 
@@ -92,6 +92,11 @@ class TaskMain extends React.Component {
             this.setState({taskLists: currentTasks})
         }
 
+        const removeTaskfromArchive = (key) => {
+          archivedTasks.splice(key, 1)
+          this.setState({archivedTasksList: archivedTasks})
+      }
+
        const onDragEnd = result => {
         if (!result.destination) return;
           const newTaskList = Array.from(this.state.taskLists);
@@ -105,6 +110,18 @@ class TaskMain extends React.Component {
         const alarmHandler = (event, key) => {
           event.preventDefault();
           setAlarmTime(event, key)
+        }
+
+        const sentToArchive = (event, value, key) => {
+          event.preventDefault();
+          currentTasks.splice(key, 1)
+          archivedTasks.push(value)
+          this.setState({
+            taskLists: currentTasks,
+            archivedTasksList: archivedTasks 
+
+          })
+
         }
         
       return (
@@ -123,7 +140,9 @@ class TaskMain extends React.Component {
     </Col>
   </Form.Row>
 </Form>
-<DragDropContext onDragEnd = {(result) => onDragEnd(result)} >
+{this.state.taskLists.length > 0 ?
+
+  <DragDropContext onDragEnd = {(result) => onDragEnd(result)} >
 <Droppable droppableId = "drop" >
   {(provided) => (
 <ListGroup className="list-group-flush" style = {{paddingTop: "30px"}} ref = {provided.innerRef} {...provided.droppableProps}>
@@ -162,9 +181,12 @@ class TaskMain extends React.Component {
       {value.task}
       <div style = {{float: "right"}}>
       <a href = "#" style = {{paddingRight: "10px"}} onClick ={()=>  this.setState({showModal: true})}>
-      <i class="far fa-clock" style = {{color: "black", paddingRight: "5px"}} 
+      <i className="far fa-clock" style = {{color: "black", paddingRight: "5px"}} 
       /> 
      {value.alarmTime}
+      </a>
+      <a href = "#" style = {{paddingRight: "15px"}} onClick ={(e)=>  sentToArchive(e, value, key)}>
+      <i className="far fa-check-square" style = {{color: "green"}}/>
       </a>
       <a href = "#" >
       <i style = {{color: 'red'}} 
@@ -181,11 +203,37 @@ class TaskMain extends React.Component {
   )}
   </Droppable>
   </DragDropContext>
+
+  : <p style = {{margin: "30px"}}> No Upcoming Tasks, Add a Task Above!</p>
+
+}
    
   </Card.Body>
 </Card>
 
-{/* Modal For Setting a Timer */}
+{/* Archived Tasks */}
+
+<Card style = {{marginTop: "30px"}}>
+  <Card.Body>
+    <Card.Title>Tasks Completed</Card.Title>
+   {this.state.archivedTasksList.length > 0 ?
+    this.state.archivedTasksList.map((value, key) => {
+      return <ListGroup>
+        <ListGroupItem> {value.task} 
+        <div style = {{float: "right"}}>
+        <a href = "#" >
+      <i style = {{color: 'red'}} 
+      onClick = {() => removeTaskfromArchive(key)} className=" fas fa-trash-alt" /> </a>
+      </div>
+        
+        </ListGroupItem>
+      </ListGroup>
+    })
+    : <p><p style = {{margin: "30px"}}> No Completed Tasks, Finish a Task to see here!</p></p>
+  
+  }
+  </Card.Body>
+</Card>
 
 
 
