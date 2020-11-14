@@ -1,11 +1,12 @@
 import React from 'react';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
-import {Card, Form, Col, Button, ListGroup, ListGroupItem, Modal, Spinner} from 'react-bootstrap'
+import {Card, Form, Col, Button, ListGroup, ListGroupItem, Modal} from 'react-bootstrap'
 
-export let currentTasks = [];
-export let archivedTasks = [];
+let currentTasks = [];
+      let archivedTasks = [];
 
 class TaskMain extends React.Component {
+
 
     constructor(props) {
         super(props);
@@ -16,7 +17,6 @@ class TaskMain extends React.Component {
             currentTime: '',
             archivedTasksList: []
         }
-        //this.setAlarmTime = this.setAlarmTime.bind(this);
 
       }
 
@@ -28,6 +28,13 @@ class TaskMain extends React.Component {
         this.interval = setInterval(
           () => this.checkAlarmClock(),
         1000)
+      }
+
+      componentDidUpdate(prevProps) {
+        if (this.props.newTask !== prevProps.newTask) {
+          currentTasks.push({task: 'Visit' + this.props.newTask, currentTime: '', alarmTime: '' })
+          this.setState({taskLists: currentTasks})
+        }
       }
 
       componentWillUnmount(){
@@ -58,7 +65,10 @@ class TaskMain extends React.Component {
         }) 
       }
 
+      
+
     render() {
+
 
       const setAlarmTime = (event, key) => {
         event.preventDefault();
@@ -123,6 +133,7 @@ class TaskMain extends React.Component {
           })
 
         }
+
         
       return (
         <React.Fragment>
@@ -234,10 +245,6 @@ class TaskMain extends React.Component {
   }
   </Card.Body>
 </Card>
-
-
-
-
 </React.Fragment>
       
   )}
