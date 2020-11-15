@@ -273,7 +273,7 @@ export default class App extends React.Component {
       <Col>
       <Route path='/' exact>
       <div>
-<p style = {{color: 'white', marginTop: "50px"}}> Not sure what to do today in {this.state.city}? <Link to= '/things-to-see'>What To See</Link> and <a href = '/where-to-eat'>Where To Eat</a> pages!</p>
+<p style = {{color: 'white', marginTop: "50px"}}> Not sure what to do today in {this.state.city}? Check out <Link to= '/things-to-see'>What To See</Link> and <a href = '/where-to-eat'>Where To Eat</a> pages!</p>
 <Card style = {{marginTop: "20px"}}>
 <Card.Body>
 <Card.Title>What do you want to do today?</Card.Title>
