@@ -174,12 +174,14 @@ export default class App extends React.Component {
   // Add new Task to do List
 
   const addTasks = (e) => {
+    e.preventDefault()
+
       if (this.state.taskName === "") {
         alert("Task Name can not be empty!")
       }
 
       else {
-        e.preventDefault()
+       
         currentTasks.push({task: this.state.taskName, currentTime: '', alarmTime: '' })
         
         this.setState({taskLists: currentTasks})
