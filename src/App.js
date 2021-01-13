@@ -43,8 +43,8 @@ export default class App extends React.Component {
     componentDidMount() {
       // Fetching Weather and Google Places Data
       let getWeather = `http://api.openweathermap.org/data/2.5/weather?q=tampere&units=metric&APPID=494b089ffcd713248e6d62d7d91d25fe`
-      let getPlaceSuggestions = `/maps/api/place/textsearch/json?query=things-to-see-${this.state.city}&key=AIzaSyBlaR5cFmeCl98AF_eLTzgavMo70hLQeds`
-      let getRestuarants = `/maps/api/place/textsearch/json?query=restuarants-in-${this.state.city}&key=AIzaSyBlaR5cFmeCl98AF_eLTzgavMo70hLQeds`
+      let getPlaceSuggestions = `/maps/api/place/textsearch/json?query=things-to-see-${this.state.city}&key=AIzaSyCRQHpdiGpQ3ecWyn9KWynZpYUr5Z7o7bg`
+      let getRestuarants = `/maps/api/place/textsearch/json?query=restuarants-in-${this.state.city}&key=AIzaSyCRQHpdiGpQ3ecWyn9KWynZpYUr5Z7o7bg`
       axios.all([
         axios.get(getWeather),
         axios.get(getPlaceSuggestions),
