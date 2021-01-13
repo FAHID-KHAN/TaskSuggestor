@@ -23,7 +23,7 @@ export default class WhereToEat extends Component {
                   <Card.Img
                     variant="top"
                     style={{ height: "200px" }}
-                    src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyCRQHpdiGpQ3ecWyn9KWynZpYUr5Z7o7bg`}
+                    src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyBlaR5cFmeCl98AF_eLTzgavMo70hLQeds`}
                   />
                   <Card.Body>
                     <Card.Title>{place.name}</Card.Title>
